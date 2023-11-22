@@ -20,10 +20,7 @@ db_user = "youtube_ripper"
 db_pass = "goog"
 db_name = "youtube_test"
 db_host = "localhost"
-# host='127.0.0.1'
 
-
-browser.get(URL_VEWN_VIDS)
 
 
 def random_within_std(mean,std):
@@ -99,7 +96,7 @@ def insert_video_profile_overview(overview):
     connector.close()
 
 
-def main():
+def get_all_videos_from_profile(channel_url):browser.get(channel_url)
         
     scroll_limit = 1000
     scroll_count = 0
@@ -152,5 +149,9 @@ def main():
         insert_video_profile_overview(video_profile_overview)
 
         #then call the insertion function
+
+def main():
+    get_all_videos_from_profile(URL_VEWN_VIDS)
+    
 
 main()
