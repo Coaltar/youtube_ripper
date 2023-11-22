@@ -1,8 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-import random 
+import random
 import requests
+import mysql.connector
+import uuid
+# import request
 
 
 browser = webdriver.Firefox()
@@ -12,6 +15,13 @@ URL_MAIN = "https://www.youtube.com/"
 URL_DUNKEY ="https://www.youtube.com/@videogamedunkey"
 URL_DUNKEY_VIDS = "https://www.youtube.com/@videogamedunkey/videos"
 URL_VEWN_VIDS = "https://www.youtube.com/@vewn/videos"
+
+db_user = "youtube_ripper"
+db_pass = "goog"
+db_name = "youtube_test"
+db_host = "localhost"
+# host='127.0.0.1'
+
 
 browser.get(URL_VEWN_VIDS)
 
@@ -51,47 +61,96 @@ def scroll_down():
     time.sleep(sleep_amount)
 
 
-scroll_limit = 1000
-scroll_count = 0
 
-scrollY = 0
-end_of_page = 0
-max_repeat = 3
-while scroll_count < scroll_limit:
-    scroll_down()
-    scroll_count += 1
+def insert_video_profile_overview(overview):
+    #reference to database
+    #insert the item
+    print("Attempting to insert...", overview)
     
-    prev_scrollY = scrollY
-    scrollY = browser.execute_script("return window.scrollY;")
-    if(prev_scrollY == scrollY):
-        end_of_page += 1
-    else:
-        end_of_page == 0
 
-    if end_of_page >= max_repeat:
-        break
+    connector = mysql.connector.connect(
+        user=db_user,
+        password=db_pass,
+        host=db_host,
+        database=db_name)
+    cursor = connector.cursor()
 
-print("Scroll Finished")
-rich_item_elems = browser.find_elements(By.CSS_SELECTOR, "div.ytd-rich-item-renderer")
+    table_name = "video_profile_overview"
+
+    insertion_statement = f"""
+    INSERT INTO video_profile_overview (id, title, url, views, age, length) VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    data = (
+        overview["id"].int,
+        overview["title"],
+        overview["url"],
+        overview["views"],
+        overview["age"],
+        overview["length"]
+    )
+
+    for item in data:
+        print(item)
+        print(type(item))
+    cursor.execute(insertion_statement, data)
+
+    connector.commit()
+    cursor.close()
+    connector.close()
 
 
-for element in rich_item_elems:
-    title = element.find_element(By.ID, "video-title").text
-    print(title)
+def main():
+        
+    scroll_limit = 1000
+    scroll_count = 0
 
-    href_extension = element.find_element(By.ID, "video-title-link").get_attribute("href")
-    print(href_extension)
-    #we want:
-    # title
+    scrollY = 0
+    end_of_page = 0
+    max_repeat = 3
+    while scroll_count < scroll_limit:
+        scroll_down()
+        scroll_count += 1
+        
+        prev_scrollY = scrollY
+        scrollY = browser.execute_script("return window.scrollY;")
+        if(prev_scrollY == scrollY):
+            end_of_page += 1
+        else:
+            end_of_page == 0
 
-    img_src = element.find_element(By.CSS_SELECTOR, "img").get_attribute("src")
-    print(img_src)
-    # href
-    # img thumbnail
-    # timestamp???
-# title_elements = browser.find_elements(By.ID, "video-title")
-# for element in title_elements:
-#     print(element.text)
+        if end_of_page >= max_repeat:
+            break
 
-#get all elements
+    print("Scroll Finished")
+    rich_item_elems = browser.find_elements(By.CSS_SELECTOR, "div.ytd-rich-item-renderer")
 
+
+    for element in rich_item_elems:
+        title = element.find_element(By.ID, "video-title").text
+        url = element.find_element(By.ID, "video-title-link").get_attribute("href")
+        img_url = element.find_element(By.CSS_SELECTOR, "img").get_attribute("src")
+        response = requests.get(img_url)
+        image_data = response.content
+        inline_elems = element.find_elements(By.CLASS_NAME, "inline-metadata-item")
+        views = inline_elems[0].text
+        age = inline_elems[1].text
+        length = element.find_element(By.CSS_SELECTOR, "div#time-status").text
+
+        video_id = uuid.uuid4()
+        video_profile_overview = {
+            "id": video_id,
+            "title": title,
+            "url": url,
+            # "img": img,
+            "views": views,
+            "age": age,
+            "length": length
+        }
+        
+        # random_uuid = uuid.uuid4()
+        # print("inserting data \n", video_profile_overview)
+        insert_video_profile_overview(video_profile_overview)
+
+        #then call the insertion function
+
+main()
