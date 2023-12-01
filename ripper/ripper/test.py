@@ -96,7 +96,8 @@ def insert_video_profile_overview(overview):
     connector.close()
 
 
-def get_all_videos_from_profile(channel_url):browser.get(channel_url)
+def get_all_videos_from_profile(channel_url):
+    browser.get(channel_url)
         
     scroll_limit = 1000
     scroll_count = 0
