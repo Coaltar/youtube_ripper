@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class WorkerConfig(AppConfig):
+class YoutubeDownloaderConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'worker'
+    name = 'youtube_downloader'
