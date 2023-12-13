@@ -1,5 +1,5 @@
 """
-WSGI config for youtube_scraper project.
+WSGI config for ripper_site project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'youtube_scraper.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ripper_site.settings')
 
 application = get_wsgi_application()
