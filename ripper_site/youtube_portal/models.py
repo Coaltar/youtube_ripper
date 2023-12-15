@@ -7,6 +7,9 @@ class Channel(models.Model):
     channel_url = models.CharField(max_length=200)
     date_searched = models.DateTimeField()
 
+    class Meta:
+        app_label = 'ytb'
+
     def __str__(self):
         return self.channel_name
     
@@ -22,6 +25,9 @@ class Video(models.Model):
     # duration = ???
     views = models.IntegerField()
     comment_count = models.IntegerField()
+
+    class Meta:
+        app_label = 'ytb'
 
     def __str__(self):
         return self.title

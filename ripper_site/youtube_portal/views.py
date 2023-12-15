@@ -20,6 +20,7 @@ class ChannelView(generic.ListView):
     context_object_name = 'channels_list'
 
     max_display = 10
+    
     def get_queryset(self):
         return Channel.objects.filter(pub_date__lte=timezone.now()).order_by("-searched")[:max_display]
 
