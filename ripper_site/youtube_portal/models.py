@@ -8,7 +8,7 @@ class Channel(models.Model):
     date_searched = models.DateTimeField()
 
     class Meta:
-        app_label = 'ytb'
+        app_label = 'youtube_portal'
 
     def __str__(self):
         return self.channel_name
@@ -22,12 +22,11 @@ class Video(models.Model):
     url =  models.CharField(max_length=200)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     published = models.DateTimeField('date published')
-    # duration = ???
     views = models.IntegerField()
     comment_count = models.IntegerField()
 
     class Meta:
-        app_label = 'ytb'
+        app_label = 'youtube_portal'
 
     def __str__(self):
         return self.title
