@@ -1,3 +1,8 @@
 
-
-<p>HELLO CHANNELS<p>
+{% if channel_list %}
+    <ul>
+        {% for channel in channel_list %}
+            <li><a href="{{channel.channel_url}}">{{ channel.channel_name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}

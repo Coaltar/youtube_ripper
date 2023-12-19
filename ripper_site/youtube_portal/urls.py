@@ -4,12 +4,12 @@ from . import views
 
 
 
-app_name = 'ytb'
+app_name = 'youtube_portal'
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('channels/<int:pk>/', views.ChannelView.as_view(), name='channels'),
-    path('video/<int:pk>/', views.VideoView.as_view(), name="video")
+    path('channels/', views.ChannelView.as_view(), name='channels'),
+    path('videos/', views.VideoView.as_view(), name="video")
     
 
     # path('', views.IndexView.as_view(), name='index'),
