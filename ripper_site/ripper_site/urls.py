@@ -18,6 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('ytb/', include('youtube_portal.urls')),
+    path('youtube_portal/', include('youtube_portal.urls')),
     path('admin/', admin.site.urls),
 ]
