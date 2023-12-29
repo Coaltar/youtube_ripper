@@ -9,7 +9,9 @@ app_name = 'youtube_portal'
 urlpatterns = [
     path('', views.index, name="index"),
     path('channels/', views.ChannelView.as_view(), name='channels'),
-    path('videos/', views.VideoView.as_view(), name="video")
+    path('videos/', views.VideoView.as_view(), name="video"),
+    path('ingest/', views.ingest, name="ingest")
+    
     
 
     # path('', views.IndexView.as_view(), name='index'),

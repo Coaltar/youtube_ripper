@@ -5,3 +5,12 @@
 <a href="videos">Go to videos</a>
 
 <h2>Ingest Channel</h2>
+
+<form action="{% url 'youtube_portal:ingest' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h3>Youtube Channel</h3></legend>
+        <input type="text" name="channel_name" >
+    </fieldset>
+    <input type="submit">
+</form
